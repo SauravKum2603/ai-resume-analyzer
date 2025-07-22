@@ -8,14 +8,10 @@ def get_gpt_feedback(resume_text, job_desc):
 Provide specific improvement suggestions.
 
 Resume:
-"""
 {resume_text}
-"""
 
 Job Description:
-"""
 {job_desc}
-"""
 
 Suggestions:"""
 
