@@ -1,18 +1,19 @@
-import streamlit as st
+import os
 from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def get_gpt_feedback(resume_text, job_desc):
-    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+    prompt = f"Compare this resume to the job description and suggest improvements:\n\nResume:\n{resume_text}\n\nJob Description:\n{job_desc}"
 
-    prompt = f"""
-    You are a professional career coach. A candidate submitted the following resume:\n\n{resume_text}\n\n
-    They are applying for the following job:\n\n{job_desc}\n\n
-    Provide specific, constructive feedback on how to improve their resume for this role.
-    """
+    try:
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",  # ✅ change to this if gpt-4 gives error
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response.choices[0].message.content
 
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}]
-    )
-
-    return response.choices[0].message.content.strip()
+    except Exception as e:
+        return f"❌ Error from OpenAI API: {e}"
