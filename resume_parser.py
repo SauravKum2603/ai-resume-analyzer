@@ -1,4 +1,3 @@
-
 import pdfplumber
 
 def extract_text_from_pdf(pdf_file):
